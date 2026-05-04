@@ -33,37 +33,32 @@ The base URL and all other settings can be changed at runtime via command-line f
 
 ## Where to put your PDFs
 
-Before running the script, place your PDFs inside the `public/` directory at the root of this project. The file names must be plain numbers — no letters, no underscores, just a number followed by `.pdf`.
+Before running the script, place your PDFs inside the `public/` directory at the root of this project. Any file ending in `.pdf` (case-insensitive) will be picked up — the name can be a number, a word, or anything else.
 
-Valid examples:
+Examples:
 
 ```
 public/1.pdf
 public/42.pdf
-public/200.pdf
+public/report.pdf
+public/tree-scan-site-A.pdf
 ```
 
-Invalid examples (these will be ignored):
+The script will skip any file that does not have a `.pdf` extension. It will also skip generating a QR code if the output image already exists, so you can safely run the script multiple times without re-generating files.
+
+The generated QR code images are saved in the same `public/` directory, using the same base name as the PDF:
 
 ```
-public/document.pdf        <- name is not a number
-public/report_1.pdf        <- name is not a number
-public/1.PDF               <- uppercase extension is fine, but mixed-case may differ by OS
-```
-
-The script will skip any file in `public/` that is not a numerically-named PDF. It will also skip generating a QR code if the output image already exists, so you can safely run the script multiple times without re-generating files.
-
-The generated QR code images are saved in the same `public/` directory:
-
-```
-public/1.pdf    ->   public/1.png
-public/42.pdf   ->   public/42.png
+public/1.pdf              ->   public/1.png
+public/report.pdf         ->   public/report.png
+public/tree-scan-site-A.pdf  ->  public/tree-scan-site-A.png
 ```
 
 If your web application serves files from a `public/` directory (for example a Next.js or Express app), placing both the PDFs and the generated QR code images there means they are immediately accessible at:
 
 ```
 https://your-domain.com/1.pdf
+https://your-domain.com/report.pdf
 https://your-domain.com/1.png
 ```
 
@@ -96,7 +91,7 @@ Defines the `Config` dataclass, which is a simple container for all the settings
 
 **`src/scanner.py`**
 
-Contains one function, `scan_pdfs(cfg)`. It looks inside `cfg.public_dir`, collects every `.pdf` file whose name is a plain number, and returns those names sorted numerically (so `1, 2, 3 ... 10, 11` rather than `1, 10, 11, 2 ...`).
+Contains one function, `scan_pdfs(cfg)`. It looks inside `cfg.public_dir`, collects every file with a `.pdf` extension regardless of its name, and returns those names sorted alphabetically.
 
 **`src/generator.py`**
 
