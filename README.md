@@ -1,4 +1,4 @@
-# treescan_script — QR Code Generator for Bark-Code PDFs
+# QR Code Generator for Bark-Code PDFs
 
 This project scans a folder of numbered PDF files and generates a QR code image for each one. Each QR code encodes a direct URL to its corresponding PDF hosted on a web server. The generated images are saved back into the same folder alongside the PDFs.
 
